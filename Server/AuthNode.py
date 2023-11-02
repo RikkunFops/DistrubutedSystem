@@ -1,6 +1,6 @@
 import socket
 import socketserver
-import ServerLib
+import Server.ServerLib as ServerLib
 import queue
 import threading
 
@@ -24,7 +24,7 @@ def is_valid_input(username, password):
 
 def authorization_worker():
     while True:
-        username, password = authorization_queue.get()
+        username, password = Auth_Queue.get()
         # Perform authentication and authorization checks here
         if is_authorized(username, password):
             # Grant access
@@ -32,9 +32,14 @@ def authorization_worker():
         else:
             # Deny access
             print(f"Access denied for {username}")
-        authorization_queue.task_done()
+        Auth_Queue.task_done()
 
 def is_authorized(username, password):
+
+    if (username, password) == ("Admin", "Admin"):
+        return True
+    else:
+        return False
     # Implement your authorization logic here
     # Check the username and password against your system's rules
     # Return True if authorized, False if not
